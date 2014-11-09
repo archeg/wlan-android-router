@@ -1,23 +1,36 @@
 #!/usr/bin/env python
 import json
 from pymongo import MongoClient
-from configuration import ConfigService
 import db
+from server_infrastructure import *
+from wol import app
 
 __author__ = 'archeg'
 
-from flask import Flask
-from flask import request
+from flask import request,  jsonify
+from db import DbService
 import requests
 
-app = Flask(__name__)
-config = ConfigService()
-db = db.DbService(MongoClient()["WOL"])
+db = DbService(MongoClient()["WOL"])
 
 
 @app.route("/")
 def hello_world():
     return 'Hello World'
+
+
+@app.route("/wol/api/v1.0/auth", methods=['POST'])
+def auth():
+    request_json = request.get_json(force=True)
+
+    check_json_for_keys(["login", "pwd", "device_id"], request_json)
+    login = request_json["login"]
+    pwd = request_json["pwd"]
+    device_id = request_json["device_id"]
+    token = db.authenticate(login, pwd, device_id)
+    if not token:
+        raise InvalidFormat()
+    return jsonify({"token": token})
 
 
 @app.route("/wol/api/v1.0/send-wakeup", methods=['POST'])
@@ -37,9 +50,8 @@ def send_wakeup():
     return "Received answer: " + answer.content, answer.status_code
 
 
-def get_google_header():
-    return {"Authorization": "key="+config.get_config("google-api-key"), "Content-Type": "application/json"}
-
-if __name__ == '__main__':
-    app.debug = True
-    app.run(debug=True)
+@app.errorhandler(InvalidFormat)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
