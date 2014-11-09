@@ -1,0 +1,8 @@
+1) run shell cmd:
+$ android update project -p . # in the root of the project
+2) import the project, selecting SBT project and checking auto-import
+3) Choose android SDK in project structure settings
+4) Create run configuration
+5) In run configuration:
+a) In before launch, remove make step
+b) add 'run SBT command step' with following: "android:package-debug"
