@@ -1,7 +1,7 @@
 __author__ = 'archeg'
 
 
-class InvalidFormat(Exception):
+class WebException(Exception):
     status_code = 400
 
     def __init__(self, message, status_code=None, payload=None):
@@ -15,3 +15,12 @@ class InvalidFormat(Exception):
         rv = dict(self.payload or ())
         rv['message'] = self.message
         return rv
+
+
+class InvalidFormatException(WebException):
+    pass
+
+
+class PermissionDeniedException(WebException):
+    def __init__(self):
+        WebException.__init__(self, "Permission denied", status_code=403)

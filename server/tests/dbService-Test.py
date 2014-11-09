@@ -2,7 +2,7 @@
 from unittest import *
 import datetime
 from pymongo import MongoClient
-from db import DbService
+from wol.db import DbService
 
 __author__ = 'archeg'
 
@@ -140,3 +140,26 @@ class TestDbService(TestCase):
         # the token can be renewed
         token = self.dbclient.authenticate(login, "1234", dev)
         self.assertTrue(self.dbclient.check_token(login, dev, token))
+
+    def test_getdeviceids(self):
+        login = "archeg@gmail.com"
+        login2 = "niceguy@gmail.com"
+        dev = "dev1"
+        dev1 = "dev2"
+        dev2 = "dev3"
+        dev3 = "dev3"
+        token = self.dbclient.authenticate(login, "1234", dev)
+        token = self.dbclient.authenticate(login, "1234", dev1)
+        token = self.dbclient.authenticate(login, "1234", dev2)
+        token2 = self.dbclient.authenticate(login2, "1234", dev3)
+
+        devices1 = self.dbclient.get_deviceids(login)
+        devices2 = self.dbclient.get_deviceids(login2)
+
+        self.assertTrue(dev in devices1)
+        self.assertTrue(dev1 in devices1)
+        self.assertTrue(dev2 in devices1)
+        self.assertTrue(dev3 in devices2)
+
+        self.assertEqual(3, len(devices1))
+        self.assertEqual(1, len(devices2))

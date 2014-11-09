@@ -31,7 +31,7 @@ class DbService():
                     "pwd": pbkdf2_sha256.encrypt(pwd, rounds=20000, salt_size=16),
                     "registered_date": datetime.datetime.utcnow(),
                     "reg_ids": {},
-                    "tokens": {device_id: {"token": uuid.uuid1(), "logintime": datetime.datetime.utcnow()}}
+                    "tokens": {device_id: {"token": str(uuid.uuid1()), "logintime": datetime.datetime.utcnow()}}
                 })
 
             storedlogin = self.usertable.find_one({"_id": storedloginid})
@@ -64,6 +64,12 @@ class DbService():
         self.usertable.update({"login": login}, {
             "$set": {"reg_ids."+device_id: regid}
         })
+
+    def get_deviceids(self, login):
+        """
+        @return all device ids that are available
+        """
+        return self.usertable.find_one({"login": login}, {"devices": 1})["devices"]
 
     def get_regid(self, login, deviceid):
         """
