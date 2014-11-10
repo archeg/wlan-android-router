@@ -134,7 +134,7 @@
 -keep class android.test.InstrumentationTestRunner { <init>(...); }
 
 # view AndroidManifest.xml #generated:5
--keep class scaloid.example.HelloScaloid { <init>(...); }
+-keep class scaloid.powerwlan.WlanMainActivity { <init>(...); }
 
 -dontobfuscate
 -dontoptimize

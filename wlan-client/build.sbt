@@ -2,7 +2,7 @@ import android.Keys._
 
 android.Plugin.androidBuild
 
-name := "hello-scaloid-sbt"
+name := "power-wlan"
 
 scalaVersion := "2.11.3"
 
