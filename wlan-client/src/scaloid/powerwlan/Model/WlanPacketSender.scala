@@ -1,6 +1,6 @@
-package scaloid.powerwlan
+package scaloid.powerwlan.Model
 
-import java.net.{DatagramSocket, InetAddress, DatagramPacket}
+import java.net.{DatagramPacket, DatagramSocket, InetAddress}
 
 /**
  * Created by archeg on 10.11.14.

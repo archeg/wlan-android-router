@@ -2,6 +2,8 @@ import android.Keys._
 
 android.Plugin.androidBuild
 
+useProguard := false
+
 name := "power-wlan"
 
 scalaVersion := "2.11.3"
@@ -16,6 +18,8 @@ proguardOptions in Android ++= Seq("-dontobfuscate", "-dontoptimize", "-keepattr
 )
 
 libraryDependencies += "org.scaloid" %% "scaloid" % "3.6-10" withSources() withJavadoc()
+
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
 
 scalacOptions in Compile += "-feature"
 
