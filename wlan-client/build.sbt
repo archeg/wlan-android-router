@@ -26,3 +26,7 @@ scalacOptions in Compile += "-feature"
 run <<= run in Android
 
 install <<= install in Android
+
+//debugIncludesTests := false
+
+debugIncludesTests in Android := false
