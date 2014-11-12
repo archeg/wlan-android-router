@@ -5,7 +5,7 @@ import java.net.{DatagramPacket, DatagramSocket, InetAddress}
 /**
  * Created by archeg on 10.11.14.
  */
-class WlanPacketSender(mac: Array[Byte], ip: Array[Byte], port: Int = 9) {
+class WlanPacketSender(mac: WlanMac, ip: Array[Byte], port: Int = 9) {
 
     def send() = {
         val address = InetAddress getByAddress ip
@@ -17,8 +17,9 @@ class WlanPacketSender(mac: Array[Byte], ip: Array[Byte], port: Int = 9) {
            bytes(i) = 0xFF.asInstanceOf[Byte]
         }
 
+        val macArray = mac.toBytes()
         for(i <- 6 until bytes.length){
-            System.arraycopy(mac, 0, bytes, i, mac.length)
+            System.arraycopy(macArray, 0, bytes, i, macArray.length)
         }
 
         val packet = new DatagramPacket(bytes, bytes.length, address, port)
